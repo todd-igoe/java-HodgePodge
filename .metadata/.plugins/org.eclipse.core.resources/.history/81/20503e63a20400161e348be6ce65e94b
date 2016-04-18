@@ -1,0 +1,58 @@
+public class BreakoutShape {
+private Color c o l o r ;
+private boolean f i l l ;
+private RectangularShape shape ;
+public BreakoutShape ( RectangularShape shape , Color color , boolean
+f i l l ) {
+this . shape = shape ;
+this . c o l o r = c o l o r ;
+this . f i l l = f i l l ;
+}
+public Color getColor ( ) {
+return c o l o r ;
+}
+protected Rectangle getBounds ( ) {
+return shape . getBounds ( ) ;
+}
+public void changeColor ( Color c o l o r ) {
+this . c o l o r = c o l o r ;
+}
+public void draw ( Graphics2D g2 ) {
+g2 . setPaint ( c o l o r ) ;
+g2 . draw ( shape ) ;
+i f ( f i l l ) {
+g2 . f i l l ( shape ) ;
+}
+}
+public double getX ( ) {
+return shape . getX ( ) ;
+}
+
+public double getY ( ) {
+return shape . getY ( ) ;
+}
+public double getHeight ( ) {
+return shape . getHeight ( ) ;
+}
+public double getWidth ( ) {
+return shape . getWidth ( ) ;
+}
+public boolean i n t e r s e c t s ( BreakoutShape other ) {
+return shape . i n t e r s e c t s ( other . shape . getBounds ( ) ) ;
+}
+public boolean below ( BreakoutShape other ) {
+return getY ( ) > = other . getY ( ) + other . getHeight ( ) ;
+}
+public boolean above ( BreakoutShape other ) {
+return getY ( ) + getHeight ( ) < = other . getY ( ) ;
+}
+public boolean l e f t O f ( BreakoutShape other ) {
+return getX ( ) + getWidth ( ) < = other . getX ( ) ;
+}
+public boolean rightOf ( BreakoutShape other ) {
+return getX ( ) > = other . getX ( ) + other . getWidth ( ) ;
+}
+public void move( int dx , int dy ) {
+shape . setFrame ( getX ( ) + dx , getY ( ) + dy , getWidth ( ) , getHeight ( ) ) ;
+}
+}

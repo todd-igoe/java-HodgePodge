@@ -1,0 +1,30 @@
+
+
+import java . awt . * ;
+import java . i o . F i l e ;
+import javax . imageio . ImageIO ;
+public class Player {
+private static int INITIAL NUM LIVES = 3 ;
+private static int IMAGE Y POSITION = 450;
+private static int IMAGE H GAP = 5 ;
+private int numLives ;
+public Player ( ) {
+this . numLives = INITIAL NUM LIVES ;
+}
+public void k i l l P l a y e r ( ) {
+numLives -- ;
+}
+public boolean i s A l i v e ( ) {
+return ( numLives > 0) ;
+}
+public void draw ( Graphics2D g2 ) {
+try {
+Image image = ImageIO . read (new F i l e ( "player.gif" ) ) ;
+for ( int x = 0 ; x < numLives ; x++) {
+g2 . drawImage ( image , x * ( image . getWidth ( null ) + IMAGE H GAP) ,
+IMAGE Y POSITION, null ) ;
+}
+} catch ( Exception newException ) {
+}
+}
+}

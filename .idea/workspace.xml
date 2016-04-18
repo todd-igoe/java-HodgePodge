@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b62c1780-a47b-4e6d-9260-d984aabe59a5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hodgePodge/hodgePodge.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hodgePodge/src/Abstract.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hodgePodge/src/IFace.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hodgePodge/src/Main.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/hodgePodge/src/TwoDShape.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Abstrakt/.idea/workspace.xml" afterPath="$PROJECT_DIR$/Abstrakt/.idea/workspace.xml" />
     </list>
     <ignored path="java-HodgePodge.iws" />
     <ignored path=".idea/workspace.xml" />

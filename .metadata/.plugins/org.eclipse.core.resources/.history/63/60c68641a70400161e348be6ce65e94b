@@ -1,0 +1,16 @@
+package breakout2;
+
+import javax . swing . * ;
+import java . awt . event . * ;
+public class BreakoutFrame extends JFrame {
+private static final int HEIGHT = 600;
+private static final int WIDTH = 488;
+private BreakoutPanel panel = new BreakoutPanel ( ) ;
+public BreakoutFrame ( ) {
+setDefaultCloseOperation ( JFrame . DISPOSE ON CLOSE) ;
+setLocation (100 ,100) ;
+s e t S i z e (WIDTH, HEIGHT) ;
+add ( panel ) ;
+s e t R e s i z a b l e ( false ) ;
+}
+}

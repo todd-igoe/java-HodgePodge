@@ -1,0 +1,177 @@
+package Bejeweled;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+public class Board extends JPanel{
+
+    final int BOARDWIDTH = 8;
+    final int BOARDHEIGHT = 8;
+    boolean isAlive, isPattern, switchedBack;
+    Gem[][] gems;
+    int fromX, fromY, toX, toY;
+    boolean selected = true;
+
+    public Board() {
+        gems = new Gem[BOARDWIDTH][BOARDHEIGHT];
+        addMouseListener(new MouseInputAdapter());
+    }
+
+    int cellWidth() {
+        return (int) getSize().getWidth() / BOARDWIDTH;
+    }
+
+    int cellHeight() {
+        return (int) getSize().getHeight() / BOARDHEIGHT;
+    }
+
+    public void start(){
+        isPattern = switchedBack = false;
+        isAlive = true;
+        do { //create a new grid of cells; if a pattern exists after creating it, do it again
+            fillBoard();
+            checkPattern();
+        }while(isPattern);
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        for (int x = 0; x < BOARDWIDTH; x++) {
+            for (int y = 0; y < BOARDHEIGHT; y++) {
+                drawCell(g, x, y, gems[x][y]); //paint a single cell
+            }
+        }
+    }
+
+    public void fillBoard(){ //fill an array of Gem with new gems with random values for 'type'
+        for (int x = 0; x < BOARDWIDTH; x++) {
+            for (int y = 0; y < BOARDHEIGHT; y++) {
+                gems[x][y] = new Gem();
+            }
+        }
+    }
+
+    public void drawCell(Graphics g, int x, int y, Gem gem) {
+        x = x * cellWidth();
+        y = y * cellHeight();
+
+        Color colors[] = { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 0, 255), new Color(127, 0, 255), new Color(0, 0, 0) };
+        Color color = colors[gem.getType()];
+
+        g.setColor(color);
+        g.fillRect(x, y, x + cellWidth(), y + cellHeight());
+        System.out.println(cellWidth());
+
+        g.setColor(Color.BLACK); //border to cells, purely aesthetic
+        g.drawLine(x, y, x, y + cellHeight());
+        g.drawLine(x, y + cellHeight(), x + cellWidth(), y + cellHeight());
+        g.drawLine(x + cellWidth(), y + cellHeight(), x + cellWidth(), y);
+        g.drawLine(x + cellWidth(), y, x, y);
+
+    }
+
+    class MouseInputAdapter extends MouseAdapter {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            selectGems(e);
+        }
+    }
+
+    public void selectGems(MouseEvent e){
+        int x = e.getX() / cellWidth();
+        int y = e.getY() / cellHeight();
+        if(!selected) { //select the first gem
+            fromX = x;
+            fromY = y;
+            selected = true;
+        }else{ //select the second gem and switch them
+            toX = x;
+            toY = y;
+            if((Math.abs(fromX - toX) == 1 ^ Math.abs(fromY - toY) == 1) & (gems[fromX][fromY].getType() != gems[toX][toY].getType())) {
+                switchGems();
+                selected = false;
+            }
+        }
+    }
+
+    public void switchGems(){ //switch the two gems that the user selected
+        int tempType = gems[fromX][fromY].getType();
+        gems[fromX][fromY].setType(gems[toX][toY].getType());
+        gems[toX][toY].setType(tempType);
+        checkPattern(); //check if a pattern has been created because of this change on the board, if not, the gems will be switched back
+
+        switchedBack = false;
+        repaint();
+    }
+
+    public void checkPattern() {
+        Gem dummy1 = new Gem(); //create 2 new Gems that will hold gems that need to be deleted
+        Gem dummy2 = new Gem();
+
+        isPattern = false;
+        for (int x = 0; x < BOARDWIDTH + 1; x++) {
+            for (int y = 0; y < BOARDHEIGHT + 1; y++) {
+                try {
+                    if ((gems[x][y].getType() == gems[x + 1][y].getType()) && (gems[x + 1][y].getType() == gems[x + 2][y].getType())) { //Checks for 3 horizontal gems in a row
+                        try {
+                            if (gems[x + 2][y].getType() == gems[x + 3][y].getType()) { //checks for 4 horizontal gems in a row
+                                dummy1 = gems[x + 3][y]; //set dummy1 to the fourth gem in the row
+                                try {
+                                    if (gems[x + 3][y].getType() == gems[x + 4][y].getType()) { //checks for 5 horizontal gems in a row
+                                        dummy2 = gems[x + 4][y]; //set dummy2 to the fifth gem in the row
+                                    }
+                                }catch(ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                            }
+                        }catch(ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                        isPattern = true;
+                        deletePattern(gems[x][y], gems[x + 1][y], gems[x + 2][y], dummy1, dummy2); //delete the gems that are in a pattern
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {e.printStackTrace();}
+                try{
+                    if ((gems[x][y].getType() == gems[x][y + 1].getType()) && (gems[x][y + 1].getType() == gems[x][y + 2].getType())) { //Check for 3 vertical gems in a row
+                        try {
+                            if (gems[x][y + 2].getType() == gems[x][y + 3].getType()) { //checks for 4 vertical gems in a row
+                                dummy1 = gems[x][y + 3]; //set dummy1 to the fourth gem in the row
+                                try {
+                                    if (gems[x][y + 3].getType() == gems[x][y + 4].getType()) { //check for 5 vertical gems in a row
+                                        dummy2 = gems[x][y + 4]; //set dummy2 to the fourth gem in the row
+                                    }
+                                }catch(ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                            }
+                        }catch(ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                        isPattern = true;
+                        deletePattern(gems[x][y], gems[x][y + 1], gems[x][y + 2], dummy1, dummy2); //delte the gems that are in a pattern
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {e.printStackTrace();}
+            }
+        }
+
+        if(!isPattern && !switchedBack){ //if there's no pattern and not switchedback, meaning it hasn't already run the code below before during this move: execute it.
+            switchedBack = true;
+            switchGems(); //Switching the gems didn't make a pattern so this kind of resets it
+        }
+    }
+
+    public void deletePattern(Gem gem1, Gem gem2, Gem gem3, Gem gem4, Gem gem5){
+        gem1.setType(7);
+        gem2.setType(7);
+        gem3.setType(7);
+        gem4.setType(7);
+        gem5.setType(7);
+        for (int x = 0; x < BOARDWIDTH; x++) {
+            for (int y = 0; y < BOARDHEIGHT; y++) {
+                if(gems[x][y].getType() == 7){ //search for all gems with type 7 indicating it should be deleted
+                    for (int i = y; i >= 0; i--) {
+                        if(i == 0) //if a gem on the top row is deleted, generate a new one
+                            gems[x][i].setType(gems[x][i].genType());
+                        else //if some other gem is deleted copy the one above it to its current position
+                            gems[x][i].setType(gems[x][i-1].getType());
+                    }
+                }
+            }
+        }
+        checkPattern(); //check for newly created patterns because of changes on the board. This means it will do this until there are no more patterns.
+    }
+}

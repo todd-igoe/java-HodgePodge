@@ -1,0 +1,25 @@
+package breakout2;
+
+import javax.swing.*;
+
+public class BreakoutFrame extends JFrame {
+	private static final int HEIGHT = 600;
+	private static final int WIDTH = 488;
+	private BreakoutPanel panel = new BreakoutPanel ( ) ;
+	
+	public BreakoutFrame ( ) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE) ;
+		setLocation (100 ,100) ;
+		setSize(WIDTH, HEIGHT) ;
+		add(panel);
+		setResizable(false );
+	}
+	
+	public void displayMenu ( ) {
+		JMenuBar menuBar = new JMenuBar ( ) ;
+		menuBar.add (new GameMenu( ) ) ;
+		menuBar.add (new ColorMenu ( ) ) ;
+		menuBar.add (new SpeedMenu ( ) ) ;
+		setJMenuBar (menuBar) ;
+	}
+}

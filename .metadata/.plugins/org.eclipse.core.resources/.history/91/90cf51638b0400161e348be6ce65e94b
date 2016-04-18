@@ -1,0 +1,20 @@
+
+import javax.swing.*; 
+public class Bejeweled extends JFrame{
+
+    public Bejeweled(){
+        Board board = new Board();
+        getContentPane().add(board);
+        board.start();
+
+        setTitle("Bejeweled");
+        setSize(400, 400);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args){
+        Bejeweled game = new Bejeweled();
+        game.setLocationRelativeTo(null);
+        game.setVisible(true);
+    }
+}

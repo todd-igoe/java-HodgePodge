@@ -1,0 +1,27 @@
+package breakout2;
+
+import java.awt.Color;
+
+// enum BallColor, sec 11.6, p252
+
+public enum BallColor {
+	Red(Color.RED) ,
+	Blue ( Color .BLUE) ,
+	Green ( Color .GREEN) ;
+	
+	private Color color;
+	BallColor(Color color) {
+	this.color = color;
+}
+Color color( ) {
+return color;
+}
+} // end enum BallColor
+
+// p243:
+public class Breakout {
+public static void main ( String [ ] args ) {
+	BreakoutFrame frame = new BreakoutFrame ( ) ;
+	frame.setVisible( true ) ;
+	}
+}	

@@ -1,0 +1,19 @@
+package breakout;
+
+import javax.swing.JFrame;
+
+class BreakoutFrame extends JFrame {
+	
+	public static final int HEIGHT = 600;
+	public static final int WIDTH = 488;
+	public static final int LOCATION_X = 50;
+	public static final int LOCATION_Y = 100;
+	
+	public BreakoutFrame ( ) {
+		super();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+		setLocation(LOCATION_X, LOCATION_Y) ;
+		setSize(WIDTH, HEIGHT) ;
+		setResizable ( false ) ;
+	}
+}

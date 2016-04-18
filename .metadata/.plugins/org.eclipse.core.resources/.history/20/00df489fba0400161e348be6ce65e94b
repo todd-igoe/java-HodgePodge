@@ -1,0 +1,102 @@
+package breakout2;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+//import breakout2.BallSpeedListener;
+
+public class BreakoutFrame extends JFrame {
+	private static final int HEIGHT = 600;
+	private static final int WIDTH = 488;
+	private BreakoutPanel panel = new BreakoutPanel ( ) ;
+	
+	public BreakoutFrame ( ) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE) ;
+		setLocation (100 ,100) ;
+		setSize(WIDTH, HEIGHT) ;
+		add(panel);
+		setResizable(false );
+	}
+	
+	public void displayMenu ( ) {
+		JMenuBar menuBar = new JMenuBar ( ) ;
+		menuBar.add (new GameMenu( ) ) ;
+		menuBar.add (new ColorMenu ( ) ) ;
+		menuBar.add (new SpeedMenu ( ) ) ;
+		setJMenuBar (menuBar) ;
+	}
+	
+
+private class GameMenu extends JMenu {
+public GameMenu( ) {
+super ( "Game" ) ;
+JMenuItem startGameMI = new JMenuItem ( "Start" , ' S ' ) ;
+startGameMI . setAccelerator(KeyStroke . getKeyStroke ( KeyEvent . VK S ,
+InputEvent .CTRL MASK) ) ;
+JMenuItem pauseMI = new JMenuItem ( "Pause" , ' P ' ) ;
+pauseMI . setAccelerator(KeyStroke . getKeyStroke ( KeyEvent .VK P,
+InputEvent .CTRL MASK) ) ;
+JMenuItem quitMI = new JMenuItem ( "Quit" ) ;
+startGameMI . addActionListener (new ActionListener ( ) {
+public void actionPerformed ( ActionEvent e ) {
+panel . s t a r t ( ) ;
+}
+} ) ;
+pauseMI . addActionListener (new ActionListener ( ) {
+public void actionPerformed ( ActionEvent e ) {
+panel . pause ( ) ;
+}
+} ) ;
+quitMI . addActionListener (new ActionListener ( ) {
+public void actionPerformed ( ActionEvent e ) {
+System . e x i t (0) ;
+}
+} ) ;
+add ( startGameMI ) ;
+add ( pauseMI ) ;
+add ( quitMI ) ;
+}
+}
+private class ColorMenu extends JMenu {
+public ColorMenu ( ) {
+super ( "Ball Color" ) ;
+for ( BallColor c o l o r : BallColor . values ( ) ) {
+JMenuItem menuItem = new JMenuItem ( c o l o r . name ( ) + " Ball" ) ;
+menuItem . addActionListener (new B a l l C o l o r L i s t e n e r ( c o l o r ) ) ;
+add ( menuItem ) ;
+}
+}
+}
+private class B a l l C o l o r L i s t e n e r implements ActionListener {
+private BallColor c o l o r ;
+
+public void actionPerformed ( ActionEvent e ) {
+panel . changeBallColor ( c o l o r ) ;
+}
+public B a l l C o l o r L i s t e n e r ( BallColor c o l o r ) {
+this . c o l o r = c o l o r ;
+}
+}
+private class SpeedMenu extends JMenu {
+public SpeedMenu ( ) {
+super ( "Ball Speed" ) ;
+for ( BallSpeed s : BallSpeed . values ( ) ) {
+JMenuItem menuItem = new JMenuItem ( s . name ( ) ) ;
+menuItem . addActionListener (new BallSpeedListener ( s . speed ( ) ) ) ;
+add ( menuItem ) ;
+}
+}
+}
+private class BallSpeedListener implements ActionListener {
+private int speed ;
+public void actionPerformed ( ActionEvent e ) {
+panel . changeBallSpeed ( speed ) ;
+}
+public BallSpeedListener ( int speed ) {
+this . speed = speed ;
+}
+}
+}
+}

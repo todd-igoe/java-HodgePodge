@@ -1,0 +1,10 @@
+
+
+
+// p243:
+public class Breakout {
+public static void main ( String [ ] args ) {
+BreakoutFrame frame = new BreakoutFrame ( ) ;
+frame . s e t V i s i b l e ( true ) ;
+}
+}

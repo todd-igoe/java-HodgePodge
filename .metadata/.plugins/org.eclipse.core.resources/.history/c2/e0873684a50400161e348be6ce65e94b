@@ -1,0 +1,192 @@
+package breakout2;
+
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
+public class BreakoutPanel extends JPanel {
+private static final int NUM_BRICK_ROWS = 10;
+private static final int NUM_BRICK_COLUMNS = 30;
+private javax.swing.Timer timer ;
+private Ball ball ;
+private ArrayList < Brick > bricks ;
+private Paddle paddle ;
+
+private Player player ;
+private boolean gameStarted = false ;
+public BreakoutPanel ( ) {
+ball = new Ball(Color.RED , this ) ;
+paddle = new Paddle(Color.BLUE, this ) ;
+bricks = new ArrayList <> () ;
+player = new Player ( ) ;
+createbricks ( ) ;
+addKeyListener (new KeyAdapter ( ) {
+public void keyPressed ( KeyEvent e ) {
+String s = KeyEvent.getKeyText ( e.getKeyCode ( ) ) ;
+if (e.getKeyCode ( ) == KeyEvent.VK_LEFT) {
+paddle.moveLeft ( ) ;
+}
+if (s.equals ( "Right" ) ) {
+paddle.moveRight ( ) ;
+}
+r e p a i n t ( ) ;
+}
+} ) ;
+setFocusable ( true ) ;
+addMouseMotionListener (new MouseMotionAdapter ( ) {
+boolean f i r s t T i m e = true ;
+int oldX ;
+public void mouseMoved ( MouseEvent e ) {
+if (f i r s t T i m e ) {
+oldX = e.getX ( ) ;
+f i r s t T i m e = false ;
+}
+paddle.move( e.getX ( ) - oldX ) ;
+
+oldX = e.getX ( ) ;
+r e p a i n t ( ) ;
+}
+} ) ;
+}
+private Color getRandomColor ( ) {
+Color color = new Color ( ( int ) (Math.random ( ) * 256) , ( int ) (Math.random ( ) * 256) , ( int ) (Math.random ( ) * 256) ) ;
+if ( getBackground ( ).equals ( color ) ) {
+return Color .RED;
+}
+return color ;
+}
+private void createbricks ( ) {
+for ( int row = 0 ; row < NUM_BRICK_ROWS; row++) {
+for ( int c o l = 0 ; c o l < NUM_BRICK_COLUMNS; c o l++) {
+bricks.add (new Brick ( row , col , getRandomColor ( ) ) ) ;
+}
+}
+}
+public void start() {
+gameStarted = true ;
+if (timer != null ) {
+timer.stop ( ) ;
+}
+if (! player.i s A l i v e ( ) ) {
+player = new Player ( ) ;
+ball = new Ball ( BallColor.Red , this ) ;
+createbricks ( ) ;
+}
+timer = new javax.swing.Timer ( BallSpeed .NORMAL. speed ( ) , new
+TimeListener ( ) ) ;
+timer.start() ;
+r e p a i n t ( ) ;
+}
+public void pause ( ) {
+if (timer == null ) {
+return ;
+}
+timer.stop ( ) ;
+}
+public void changeBallColor ( BallColor color ) {
+ball.changeColor ( color ) ;
+r e p a i n t ( ) ;
+}
+public void showMessage ( String s , Graphics2D g2 ) {
+Font myFont = new Font ( "SansSerif" , Font .BOLD + Font.ITALIC , 40) ;
+g2.setFont (myFont) ;
+g2.setColor ( Color .RED) ;
+
+Rectangle2D textBox = myFont.getStringBounds ( s , g2 .
+getFontRenderContext ( ) ) ;
+g2.drawString ( s , ( int ) ( getWidth ( ) / 2 - textBox.getWidth ( ) / 2) , (
+int ) ( getHeight ( ) / 2 - textBox.getHeight ( ) ) ) ;
+}
+public void paintComponent ( Graphics g ) {
+super.paintComponent ( g ) ;
+Graphics2D g2 = ( Graphics2D ) g ;
+if (bricks.s i z e ( ) == 0 && ! gameStarted ) {
+showMessage ( "YOU WIN!" , g2 ) ;
+gameStarted = false ;
+} else if (! player.i s A l i v e ( ) ) {
+showMessage ( "GAME OVER!" , g2 ) ;
+gameStarted = false ;
+} else {
+ball.draw ( g2 ) ;
+paddle.draw ( g2 ) ;
+for ( Brick brick : bricks ) {
+brick.draw ( g2 ) ;
+}
+}
+if (gameStarted ) {
+player.draw ( g2 ) ;
+}
+}
+public void changeBallSpeed ( int speed ) {
+timer.setDelay ( speed ) ;
+}
+class TimeListener implements ActionListener {
+public void bounceBall ( Ball ball , Brick brick ) {
+if (ball.below ( brick ) ) {
+ball.goDown ( ) ;
+}
+if (ball.above ( brick ) ) {
+ball.goUp ( ) ;
+}
+if (ball.l e f t O f ( brick ) ) {
+ball.goLeft ( ) ;
+}
+if (ball.rightOf ( brick ) ) {
+ball.goRight ( ) ;
+}
+}
+public void bounceBall ( Ball ball , ArrayList < Brick > bricks ) {
+if (bricks.s i z e ( ) == 0) {
+return ;
+}
+if (bricks.s i z e ( ) == 1) {
+bounceBall ( ball , bricks.get (0) ) ;
+return ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+Brick combinedBrick = bricks.get (0).add ( bricks.get (1) ) ;
+bounceBall ( ball , combinedBrick ) ;
+}
+public void actionPerformed ( ActionEvent e ) {
+Ball newBall = ball.g e t V i r t u a l ball ( ) ;
+ArrayList < Brick > bricksToBeDeleted = new ArrayList < Brick > () ;
+for ( Brick brick : bricks ) {
+if (brick.i n t e r s e c t s ( newBall ) ) {
+bricksToBeDeleted.add ( brick ) ;
+}
+}
+bounceBall ( ball , bricksToBeDeleted ) ;
+for ( Brick brick : bricksToBeDeleted ) {
+bricks.remove ( brick ) ;
+}
+if (newBall.i n t e r s e c t s ( paddle ) ) {
+ball.goUp ( ) ;
+if (newBall.getX ( ) + newBall.getWidth ( ) / 2 < paddle.getX ( ) +
+paddle.getWidth ( ) / 2) {
+ball.goLeft ( ) ;
+} else {
+ball.goRight ( ) ;
+}
+} else if (ball.getY ( ) > paddle.getY ( ) - paddle.getHeight ( ) ) {
+player.k i l l P l a y e r ( ) ;
+ball.goUp ( ) ;
+}
+ball.move ( ) ;
+r e p a i n t ( ) ;
+}
+}
+} // end ALL

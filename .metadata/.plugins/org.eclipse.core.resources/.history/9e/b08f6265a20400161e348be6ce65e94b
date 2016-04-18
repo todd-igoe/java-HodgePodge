@@ -1,0 +1,23 @@
+package breakout2;
+
+public class Brick extends BreakoutShape {
+private static final int HEIGHT = 10;
+private static final int WIDTH = 30;
+private static final int BRICK H GAP = 2 ;
+private static final int BRICK V GAP = 2 ;
+public Brick ( int row , int col , Color c o l o r ) {
+super (new Rectangle2D . Double (BRICK H GAP + row * (BRICK H GAP +
+Brick .WIDTH) , BRICK V GAP + c o l * (BRICK V GAP + Brick .HEIGHT) ,
+WIDTH, HEIGHT) , color , true ) ;
+}
+private Brick ( Rectangle2D rectangle , Color c o l o r ) {
+super ( rectangle , color , true ) ;
+}
+
+public Brick add ( Brick other ) {
+Rectangle2D r e c t a n g l e 1 = super . getBounds ( ) ;
+Rectangle2D r e c t a n g l e 2 = other . getBounds ( ) ;
+r e c t a n g l e 1 . add ( r e c t a n g l e 2 ) ;
+return new Brick ( rectangle1 , super . getColor ( ) ) ;
+}
+}
